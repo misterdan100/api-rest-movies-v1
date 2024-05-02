@@ -1,19 +1,23 @@
 import { API_KEY, API_KEY2 } from './secrets.js'
+const api = axios.create({
+    baseURL: 'https://api.themoviedb.org/3',
+    headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${API_KEY2}`
+      },
+    params: {
+        'language': 'es-ES'
+    }
+})
 
 const getOptions = {
     method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${API_KEY2}`
-    }
+    
   };
 
 async function getTrendingMoviesPreview() {
-    const urlAPI = 'https://api.themoviedb.org/3/trending/movie/week?language=es-ES'
-
       try {
-          const res = await fetch(urlAPI, getOptions)
-          const data = await res.json()
+          const {data} = await api('/trending/movie/week')
 
           const movies = data.results
           movies.forEach(movie => {
@@ -39,14 +43,10 @@ async function getTrendingMoviesPreview() {
 }
 
 async function getCategoriesMoviesPreview() {
-    const urlAPI = 'https://api.themoviedb.org/3/genre/movie/list?language=es-ES'
-
       try {
-          const res = await fetch(urlAPI, getOptions)
-          const data = await res.json()
+          const { data } = await api('/genre/movie/list')
 
           const categories = data.genres
-          console.log(data)
           categories.forEach(category => {
             const previewCategoriesContainer = document.querySelector('#categoriesPreview .categoriesPreview-list')
 
@@ -69,6 +69,3 @@ async function getCategoriesMoviesPreview() {
         console.log(error)
       }
 }
-
-getTrendingMoviesPreview()
-getCategoriesMoviesPreview()
