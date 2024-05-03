@@ -2,6 +2,7 @@
 searchFormBtn.addEventListener('click', () => location.hash = '#search=1')
 arrowBtn.addEventListener('click', () => location.hash = '#home')
 trendingBtn.addEventListener('click', () => location.hash = '#trends')
+scrollBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}))
 
 
 window.addEventListener('DOMContentLoaded', navigator, false)
@@ -70,6 +71,10 @@ function categoriesPage() {
     categoriesPreviewSection.classList.add('inactive')
     genericSection.classList.remove('inactive')
     movieDetailSection.classList.add('inactive')
+
+    let [ , categoryData] = location.hash.split('=')
+    let [id, genre] = categoryData.split('-')
+    getMoviesByCategory(id, genre)
 }
 
 function movieDetailsPage() {
@@ -122,4 +127,3 @@ function trendsPage() {
     genericSection.classList.remove('inactive')
     movieDetailSection.classList.add('inactive')
 }
-

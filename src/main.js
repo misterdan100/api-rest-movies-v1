@@ -6,7 +6,7 @@ const api = axios.create({
         Authorization: `Bearer ${API_KEY2}`
       },
     params: {
-        'language': 'es-ES'
+        // 'language': 'es-ES'
     }
 })
 
@@ -61,6 +61,9 @@ async function getCategoriesMoviesPreview() {
             categoryTitle.setAttribute('id', `id${category.id}`)
             const categoryTitleText = document.createTextNode(category.name)
 
+            categoryTitle.addEventListener('click', () => {
+                location.hash = `#category=${category.id}-${category.name}`
+            })
             
             categoryTitle.appendChild(categoryTitleText)
             categoryContainer.appendChild(categoryTitle)
@@ -71,4 +74,40 @@ async function getCategoriesMoviesPreview() {
       } catch (error) {
         console.log(error)
       }
+}
+
+async function getMoviesByCategory(id, genre) {
+    
+    try {
+        genericSection.textContent = ''
+        const {data} = await api('/discover/movie', {
+            params: {
+                "with_genres": id
+            }
+        })
+        const movies = data.results
+
+        headerCategoryTitle.textContent = genre
+
+        movies.forEach(movie => {
+
+          const movieContainer = document.createElement('DIV')
+          movieContainer.classList.add('movie-container')
+
+          const movieImg = document.createElement('IMG')
+          movieImg.classList.add('movie-img')
+          movieImg.setAttribute('src', `http://image.tmdb.org/t/p/w300${movie.poster_path}`)
+          movieImg.setAttribute('alt', movie.title)
+          movieImg.setAttribute('title', movie.title)
+
+          movieContainer.appendChild(movieImg)
+          genericSection.appendChild(movieContainer)
+
+        })
+
+        window.scrollTo({top: 0, behavior: 'smooth'})
+        return
+    } catch (error) {
+      console.log(error)
+    }
 }
