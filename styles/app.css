@@ -428,3 +428,23 @@ footer {
 .inactive {
     display: none;
 }
+
+/* Scroll Button */
+.scroll-btn {
+    position: fixed;
+    font-weight: bold;
+    bottom: 19px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    background: var(--purple-dark-2);
+    border-radius: 12px;
+    border: 2px solid white;
+    opacity: 50%;
+    transition: all 0.3s;
+}
+
+.scroll-btn:hover {
+    opacity: 100%;
+    transform: scale(1.10);
+}
