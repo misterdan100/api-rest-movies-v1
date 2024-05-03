@@ -8,7 +8,6 @@ window.addEventListener('DOMContentLoaded', navigator, false)
 window.addEventListener('hashchange', navigator, false)
 
 function navigator() {
-    console.log({location})
 
     if(location.hash.startsWith('#trends')) {
         trendsPage()
@@ -28,12 +27,11 @@ function navigator() {
     }
     homePage()
 
-
     location.hash
 }
 
 function homePage() {
-    console.log('Vamos para el Home!!!')
+    console.log('Home!!!')
 
     headerSection.classList.remove('header-container--long')
     headerSection.style.background = ''
@@ -48,12 +46,17 @@ function homePage() {
     genericSection.classList.add('inactive')
     movieDetailSection.classList.add('inactive')
 
-    getTrendingMoviesPreview()
-    getCategoriesMoviesPreview()
+    if(!trendingMoviesPreviewList.children.length) { 
+        getTrendingMoviesPreview()
+    }
+
+    if(!categoriesPreviewList.children.length) { 
+        getCategoriesMoviesPreview()
+    }
 }
 
 function categoriesPage() {
-    console.log('Estamos en Category!!!')
+    console.log('Category!!!')
 
     headerSection.classList.remove('header-container--long')
     headerSection.style.background = ''
@@ -70,7 +73,7 @@ function categoriesPage() {
 }
 
 function movieDetailsPage() {
-    console.log('Estamos en Movie!!!')
+    console.log('Movie!!!')
 
     headerSection.classList.add('header-container--long')
     // headerSection.style.background = ''
@@ -87,7 +90,7 @@ function movieDetailsPage() {
 }
 
 function searchPage() {
-    console.log('Estamos en Search!!!')
+    console.log('Search!!!')
 
     headerSection.classList.remove('header-container--long')
     headerSection.style.background = ''
@@ -104,7 +107,7 @@ function searchPage() {
 }
 
 function trendsPage() {
-    console.log('Estamos en Trends!!!')
+    console.log('Trends!!!')
 
     headerSection.classList.remove('header-container--long')
     headerSection.style.background = ''
