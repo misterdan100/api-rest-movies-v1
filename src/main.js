@@ -1,4 +1,4 @@
-import { API_KEY, API_KEY2 } from './secrets.js'
+// import { API_KEY, API_KEY2 } from './secrets.js'
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
     headers: {
@@ -21,7 +21,7 @@ async function getTrendingMoviesPreview() {
 
           const movies = data.results
           movies.forEach(movie => {
-            const trendingPreviewMoviesContainer = document.querySelector('#trendingPreview .trendingPreview-movieList')
+            const trendingMoviesPreviewList = document.querySelector('#trendingPreview .trendingPreview-movieList')
 
             const movieContainer = document.createElement('DIV')
             movieContainer.classList.add('movie-container')
@@ -33,7 +33,7 @@ async function getTrendingMoviesPreview() {
             movieImg.setAttribute('title', movie.title)
 
             movieContainer.appendChild(movieImg)
-            trendingPreviewMoviesContainer.appendChild(movieContainer)
+            trendingMoviesPreviewList.appendChild(movieContainer)
 
           })
 
@@ -48,7 +48,7 @@ async function getCategoriesMoviesPreview() {
 
           const categories = data.genres
           categories.forEach(category => {
-            const previewCategoriesContainer = document.querySelector('#categoriesPreview .categoriesPreview-list')
+            const categoriesPreviewList = document.querySelector('#categoriesPreview .categoriesPreview-list')
 
             const categoryContainer = document.createElement('DIV')
             categoryContainer.classList.add('category-container')
@@ -61,7 +61,7 @@ async function getCategoriesMoviesPreview() {
             
             categoryTitle.appendChild(categoryTitleText)
             categoryContainer.appendChild(categoryTitle)
-            previewCategoriesContainer.appendChild(categoryContainer)
+            categoriesPreviewList.appendChild(categoryContainer)
 
           })
 
