@@ -1,6 +1,8 @@
 // import { getTrendingMoviesPreview, getCategoriesMoviesPreview } from './main.js'
-searchFormBtn.addEventListener('click', () => location.hash = '#search=1')
-arrowBtn.addEventListener('click', () => location.hash = '#home')
+searchFormBtn.addEventListener('click', () => {
+    location.hash = `#search=${searchFormInput.value.trim()}`
+})
+arrowBtn.addEventListener('click', () => history.back())
 trendingBtn.addEventListener('click', () => location.hash = '#trends')
 scrollBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}))
 
@@ -74,6 +76,7 @@ function categoriesPage() {
 
     let [ , categoryData] = location.hash.split('=')
     let [id, genre] = categoryData.split('-')
+
     getMoviesByCategory(id, genre)
 }
 
@@ -92,9 +95,12 @@ function movieDetailsPage() {
     categoriesPreviewSection.classList.add('inactive')
     genericSection.classList.add('inactive')
     movieDetailSection.classList.remove('inactive')
+
+    const [ , id] = location.hash.split('=')
+    getMovieById(id)
 }
 
-function searchPage() {
+function searchPage() { 
     console.log('Search!!!')
 
     headerSection.classList.remove('header-container--long')
@@ -109,6 +115,9 @@ function searchPage() {
     categoriesPreviewSection.classList.add('inactive')
     genericSection.classList.remove('inactive')
     movieDetailSection.classList.add('inactive')
+
+    const [ , query ] = location.hash.split('=')
+    getMoviesBySearch(query.replaceAll('%20', ' '))
 }
 
 function trendsPage() {
@@ -126,4 +135,7 @@ function trendsPage() {
     categoriesPreviewSection.classList.add('inactive')
     genericSection.classList.remove('inactive')
     movieDetailSection.classList.add('inactive')
+
+    headerCategoryTitle.innerHTML = 'Trends'
+    getTrendingMovies()
 }
