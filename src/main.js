@@ -140,7 +140,6 @@ async function getMoviesBySearch(query) {
 }
 
 async function getMovieById(id) {
-    console.log(id)
 
     movieDetailTitle.textContent = ''
     movieDetailDescription.textContent = ''
