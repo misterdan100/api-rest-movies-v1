@@ -48,13 +48,13 @@ function homePage() {
     genericSection.classList.add('inactive')
     movieDetailSection.classList.add('inactive')
 
-    if(!trendingMoviesPreviewList.children.length) { 
+    // if(!trendingMoviesPreviewList.children.length) { 
         getTrendingMoviesPreview()
-    }
+    // }
 
-    if(!categoriesPreviewList.children.length) { 
+    // if(!categoriesPreviewList.children.length) { 
         getCategoriesMoviesPreview()
-    }
+    // }
 }
 
 function categoriesPage() {
