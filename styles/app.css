@@ -29,6 +29,7 @@
 
 html {
     background-color: var(--purple-medium-3);
+    transition: all 0.3s;
 }
 
 body {
@@ -39,6 +40,7 @@ body {
     font-size: 16px;
     margin: 4px 0 0 0;
     padding: 0;
+    transition: all 0.3s;
 }
 
 body::-webkit-scrollbar {
@@ -130,6 +132,7 @@ footer {
 
 .movie-img {
     border-radius: 8px;
+    min-height: 175px;
 }
 
 .categoriesPreview-list,
@@ -538,4 +541,36 @@ footer {
 .scroll-btn:hover {
     opacity: 100%;
     transform: scale(1.10);
+}
+
+@media (min-width: 768px) {
+    .genericList-container .movie-container {
+        width: 25%;
+    }
+
+    .genericList-container {
+        gap: 8px;
+    }
+}
+
+@media (min-width: 968px) {
+    html {
+        background-color: var(--purple-light-1);
+    }
+    body {
+        margin: 0 auto auto;
+        width: 1200px;
+        border-top: 4px solid var(--purple-medium-3);
+    }
+
+    .genericList-container .movie-container {
+        width: 20%;
+    }
+    
+}
+
+@media (min-width: 1200px) {
+    .genericList-container .movie-container {
+        width: 17%;
+    }
 }

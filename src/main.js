@@ -11,6 +11,17 @@ const api = axios.create({
 })
 
 // Utils
+const lazyLoader = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting) {
+            entry.target.setAttribute('src', entry.target.getAttribute('data-img'))
+
+        }
+    })
+})
+
+
+
 function createMovies(movies, container) {
     container.innerHTML = '';
 
@@ -24,10 +35,14 @@ function createMovies(movies, container) {
 
         const movieImg = document.createElement('IMG')
         movieImg.classList.add('movie-img')
-        movieImg.setAttribute('src', `http://image.tmdb.org/t/p/w300${movie.poster_path}`)
+        movieImg.setAttribute('data-img', `http://image.tmdb.org/t/p/w300${movie.poster_path}`)
         movieImg.setAttribute('alt', movie.title)
         movieImg.setAttribute('title', movie.title)
+        movieImg.addEventListener('error', e => {
+            e.target.setAttribute('src', `https://shop.restaurant.org/sca-dev-2019-2/img/no_image_available.jpeg`)
+        })
 
+        lazyLoader.observe(movieImg)
 
         movieContainer.appendChild(movieImg)
         container.appendChild(movieContainer)
