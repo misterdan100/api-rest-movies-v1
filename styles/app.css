@@ -111,28 +111,62 @@ button {
 /* Shared */
 .header-container,
 .trendingPreview-header,
-.categoriesPreview-container {
+.categoriesPreview-container,
+.liked-title {
     padding: 0 24px;
 }
 
 .trendingPreview-container,
 .categoriesPreview-container,
-footer {
+footer, .liked-container {
     margin-top: 48px;
 }
 
 .trendingPreview-header,
-.categoriesPreview-title {
+.categoriesPreview-title,
+.liked-header {
     margin-bottom: 24px;
 }
 
 .movie-container {
+    position: relative;
     cursor: pointer;
 }
 
 .movie-img {
     border-radius: 8px;
     min-height: 175px;
+}
+
+.movie-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+}
+
+.movie-btn::before {
+    content: '🤍';
+    font-size: 16px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 30px;
+    opacity: 50%;
+}
+
+.movie-btn--liked {
+    background-color: var(--purple-light-2);
+    box-shadow: 0px 0px 10px 2px var(--purple-dark-1);
+}
+
+.movie-btn--liked::before {
+    content: '💜';
+    opacity: 100%;
 }
 
 .categoriesPreview-list,
@@ -204,7 +238,8 @@ footer {
 
 
 /* Trending */
-.trendingPreview-header {
+.trendingPreview-header,
+.liked-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -225,7 +260,8 @@ footer {
     box-shadow: 0 0 0 3px #cdbbdc;
 }
 
-.trendingPreview-movieList {
+.trendingPreview-movieList,
+.liked-movieList {
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
@@ -235,27 +271,32 @@ footer {
 }
 
 .trendingPreview-movieList::-webkit-scrollbar,
+.liked-movieList::-webkit-scrollbar,
 .relatedMovies-scrollContainer::-webkit-scrollbar {
     height: 8px;
 }
 
 .trendingPreview-movieList::-webkit-scrollbar-thumb,
+.liked-movieList::-webkit-scrollbar-thumb,
 .relatedMovies-scrollContainer::-webkit-scrollbar-thumb {
     background: #bbb5c1;
     border-radius: 4px;
 }
 
 .trendingPreview-movieList::-webkit-scrollbar-track,
+.liked-movieList::-webkit-scrollbar-track,
 .relatedMovies-scrollContainer::-webkit-scrollbar-track {
     background-color: transparent;
 }
 
-.trendingPreview-movieList .movie-container {
+.trendingPreview-movieList .movie-container,
+.liked-movieList .movie-container {
     display: inline-block;
     margin-right: 8px;
 }
 
-.trendingPreview-movieList .movie-container .movie-img {
+.trendingPreview-movieList .movie-container .movie-img,
+.liked-movieList .movie-container .movie-img {
     height: 225px;
     min-height: 225px;
     max-height: 225px;

@@ -1,4 +1,8 @@
-// import { getTrendingMoviesPreview, getCategoriesMoviesPreview } from './main.js'
+let maxPage
+let page = 0;
+let infiniteScroll;
+let chargeMore = false;
+
 searchFormBtn.addEventListener('click', () => {
     location.hash = `#search=${searchFormInput.value.trim()}`
 })
@@ -9,8 +13,14 @@ scrollBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'sm
 
 window.addEventListener('DOMContentLoaded', navigator, false)
 window.addEventListener('hashchange', navigator, false)
+window.addEventListener('scroll', () => infiniteScroll(), false)
 
 function navigator() {
+
+    if(infiniteScroll) {
+        window.removeEventListener('scroll', infiniteScroll, {passive: false})
+        infiniteScroll = undefined
+    }
 
     if(location.hash.startsWith('#trends')) {
         trendsPage()
@@ -29,8 +39,14 @@ function navigator() {
         return 
     }
     homePage()
-
     location.hash
+
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+
+    if(infiniteScroll) {
+        window.addEventListener('scroll', infiniteScroll, {passive: false})
+    }
 }
 
 function homePage() {
@@ -48,13 +64,10 @@ function homePage() {
     genericSection.classList.add('inactive')
     movieDetailSection.classList.add('inactive')
 
-    // if(!trendingMoviesPreviewList.children.length) { 
-        getTrendingMoviesPreview()
-    // }
 
-    // if(!categoriesPreviewList.children.length) { 
-        getCategoriesMoviesPreview()
-    // }
+    getTrendingMoviesPreview()
+    getCategoriesMoviesPreview()
+
 }
 
 function categoriesPage() {
@@ -76,12 +89,13 @@ function categoriesPage() {
     let [id, genre] = categoryData.split('-')
 
     getMoviesByCategory(id, genre)
+
+    infiniteScroll = getPaginatedMoviesByCategory(id)
 }
 
 function movieDetailsPage() {
 
     headerSection.classList.add('header-container--long')
-    // headerSection.style.background = ''
     arrowBtn.classList.remove('inactive')
     arrowBtn.classList.add('header-arrow--white')
     headerTitle.classList.add('inactive')
@@ -114,6 +128,7 @@ function searchPage() {
 
     const [ , query ] = location.hash.split('=')
     getMoviesBySearch(query.replaceAll('%20', ' '))
+    infiniteScroll = getPaginatedMoviesBySearch(query)
 }
 
 function trendsPage() {
@@ -133,4 +148,6 @@ function trendsPage() {
 
     headerCategoryTitle.innerHTML = 'Trends'
     getTrendingMovies()
+
+    infiniteScroll = getPaginatedTrendingMovies
 }

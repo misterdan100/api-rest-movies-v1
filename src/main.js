@@ -21,17 +21,15 @@ const lazyLoader = new IntersectionObserver((entries) => {
 })
 
 
-
-function createMovies(movies, container) {
-    container.innerHTML = '';
+function createMovies(movies, container, clean = true) {
+    if(clean) {
+        container.innerHTML = '';
+    }
 
     movies.forEach(movie => {
         const movieContainer = document.createElement('DIV')
         movieContainer.classList.add('movie-container')
-        movieContainer.addEventListener('click', () => {
-            location.hash = `#movie=${movie.id}`
-
-        })
+        
 
         const movieImg = document.createElement('IMG')
         movieImg.classList.add('movie-img')
@@ -41,15 +39,29 @@ function createMovies(movies, container) {
         movieImg.addEventListener('error', e => {
             e.target.setAttribute('src', `https://shop.restaurant.org/sca-dev-2019-2/img/no_image_available.jpeg`)
         })
+        movieImg.addEventListener('click', () => {
+            location.hash = `#movie=${movie.id}`
+
+        })
+
+        const movieBtn = document.createElement('BUTTON')
+        movieBtn.classList.add('movie-btn')
+        movieBtn.addEventListener('click', () => {
+            movieBtn.classList.toggle('movie-btn--liked')
+            // TODO: add movie to LS
+            console.log('⭐')
+        })
 
         lazyLoader.observe(movieImg)
 
         movieContainer.appendChild(movieImg)
+        movieContainer.appendChild(movieBtn)
         container.appendChild(movieContainer)
       })
 }
 
 function createCategories(categories, container) {
+
     container.innerHTML = ''
 
     categories.forEach(category => {
@@ -71,7 +83,6 @@ function createCategories(categories, container) {
       })
 }
 
-
 // Requests to API
 async function getTrendingMoviesPreview() {
       try {
@@ -87,15 +98,51 @@ async function getTrendingMoviesPreview() {
 
 async function getTrendingMovies() {
       try {
-          const {data} = await api('/trending/movie/week')
-
+          const {data} = await api(`/trending/movie/week`)
           const movies = data.results
+
+          maxPage = data.total_pages
  
           createMovies(movies, genericSection)
+
+        //   const btnLoadMore = document.createElement('BUTTON')
+        //   btnLoadMore.innerHTML = 'Load more...'
+        //   btnLoadMore.addEventListener('click', getPaginatedTrendingMovies)
+        //   genericSection.appendChild(btnLoadMore)
           return
       } catch (error) {
         console.log(error)
       }
+}
+
+async function getPaginatedTrendingMovies() {
+
+    const {
+        scrollTop,
+        scrollHeight,
+        clientHeight
+    } = document.documentElement
+
+    const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 15)
+    const pageIsNotMax = page < maxPage
+
+    if (scrollIsBottom && pageIsNotMax) {
+        try {
+            page++
+            const { data } = await api(`/trending/movie/week`, {
+                params: {
+                    page: page + 1
+                }
+            })
+            page = data.page
+            const movies = data.results
+            createMovies(movies, genericSection, false)
+            chargeMore = false
+            return
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 async function getCategoriesMoviesPreview() {
@@ -120,7 +167,7 @@ async function getMoviesByCategory(id, genre) {
             }
         })
         const movies = data.results
-
+        maxPage = data.total_pages
         headerCategoryTitle.textContent = genre
 
         createMovies(movies, genericSection)
@@ -129,6 +176,39 @@ async function getMoviesByCategory(id, genre) {
         return
     } catch (error) {
       console.log(error)
+    }
+}
+
+
+function getPaginatedMoviesByCategory(id) {
+    return async function () {
+        const {
+            scrollTop,
+            scrollHeight,
+            clientHeight
+        } = document.documentElement
+        
+        const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 15)
+        const pageIsNotMax = page < maxPage
+        
+        if (scrollIsBottom && pageIsNotMax) {
+            try {
+                page++
+                const { data } = await api('/discover/movie', {
+                    params: {
+                        page: page +1,
+                        "with_genres": id
+                    }
+                })
+                
+                const movies = data.results
+                createMovies(movies, genericSection, false)
+                chargeMore = false
+                return
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
 }
 
@@ -141,6 +221,7 @@ async function getMoviesBySearch(query) {
             }
         })
         const movies = data.results
+        maxPage = data.total_pages
 
         headerCategoryTitle.textContent = `Results for: ${query}`
 
@@ -150,6 +231,39 @@ async function getMoviesBySearch(query) {
         return
     } catch (error) {
       console.log(error)
+    }
+}
+
+function getPaginatedMoviesBySearch(query) {
+    return async function () {
+        const {
+            scrollTop,
+            scrollHeight,
+            clientHeight
+        } = document.documentElement
+        
+        const scrollIsBottom = (scrollTop + clientHeight) >= (scrollHeight - 15)
+        const pageIsNotMax = page < maxPage
+        
+        if (scrollIsBottom && pageIsNotMax) {
+            try {
+                page++
+                const { data } = await api('/search/movie', {
+                    params: {
+                        page: page + 1,
+                        "query": query
+                    }
+                })
+                
+                const movies = data.results
+                console.log('getPaginatedMoviesBySearch')
+                createMovies(movies, genericSection, false)
+                chargeMore = false
+                return
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
 }
 
